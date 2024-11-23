@@ -3,85 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="style.css">
+    <title>Materi Guru</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        
-<h1>Smart Notes</h1>
-        <p>Membantu murid mencatat sambil mendengar guru</p>
+        <h1>Materi Guru</h1>
+        <p>Unggah dan akses materi untuk mencatat lebih mudah!</p>
     </header>
-    
-  
-<main>
-        
-<section id="upload-section">
-            <h2>Unggah File PowerPoint</h2>
-            
-     
-
-   
-<input type="file" id="ppt-upload" accept=".ppt,.pptx">
-<button id="upload-btn">Unggah dan Tampilkan</button>
-        
-</section>
-
-
-       
-</section>
-        <section id="display-section">
-            
-           
-<h2>Slide Presentasi</h2>
-            
-           
-<div id="slide-viewer">Slide akan muncul di sini</div>
-        
+    <main>
+        <section id="upload-section">
+            <h2>Unggah Materi (Guru)</h2>
+            <input type="file" id="ppt-upload" accept=".ppt,.pptx">
+            <button id="upload-btn">Unggah</button>
         </section>
 
-</section>
-        <section id="record-section">
-            
-<h2>Perekaman Audio</h2>
-            
-<button id="start-record">Mulai Rekam</button>
-            
-<button id="stop-record" disabled>Stop Rekam</button>
-            
-           
-<audio id="audio-playback" controls></audio>
-        
-        
-
-      
-
-   
-</section>
-        
-       
-<section id="notes-section">
-            
-            
-
-        
-
-    
-<h2>Catatan Interaktif</h2>
-            
-
-          
-
-       
-
-    
-<textarea id="notes" placeholder="Tulis catatan di sini..."></textarea>
-        
- 
-</section>
+        <section id="files-section">
+            <h2>Daftar Materi (Siswa)</h2>
+            <ul id="file-list">Loading...</ul>
+        </section>
     </main>
-    
-<script src="script.js"></script>
-</body>
+
+    <script src="script.js"></script>
 </body>
 </html>

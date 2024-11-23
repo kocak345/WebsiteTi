@@ -1,36 +1,49 @@
-document.getElementById('upload-btn').addEventListener('click', () => {
-    const fileInput = document.getElementById('ppt-upload');
-    if (fileInput.files.length > 0) {
-        const fileName = fileInput.files[0].name;
-        document.getElementById('slide-viewer').innerText = `File "${fileName}" telah diunggah.`;
-    } else {
-        alert("Pilih file PowerPoint terlebih dahulu!");
+const uploadBtn = document.getElementById('upload-btn');
+const fileInput = document.getElementById('ppt-upload');
+const fileList = document.getElementById('file-list');
+
+// Unggah file
+uploadBtn.addEventListener('click', async () => {
+    if (fileInput.files.length === 0) {
+        alert("Pilih file terlebih dahulu!");
+        return;
+    }
+
+    const formData = new FormData();
+    formData.append('pptFile', fileInput.files[0]);
+
+    try {
+        const response = await fetch('http://localhost:3000/upload', {
+            method: 'POST',
+            body: formData,
+        });
+
+        const result = await response.json();
+        alert(result.message);
+        fetchFiles(); // Refresh daftar file
+    } catch (error) {
+        console.error("Gagal mengunggah file:", error);
+        alert("Gagal mengunggah file!");
     }
 });
 
-// Perekaman audio
-let mediaRecorder;
-let audioChunks = [];
+// Ambil daftar file
+async function fetchFiles() {
+    try {
+        const response = await fetch('http://localhost:3000/files');
+        const files = await response.json();
 
-document.getElementById('start-record').addEventListener('click', async () => {
-    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-    mediaRecorder = new MediaRecorder(stream);
+        fileList.innerHTML = '';
+        files.forEach(file => {
+            const listItem = document.createElement('li');
+            listItem.innerHTML = `<a href="http://localhost:3000${file.url}" target="_blank">${file.name}</a>`;
+            fileList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Gagal mengambil daftar file:", error);
+        fileList.innerHTML = '<li>Error memuat daftar file!</li>';
+    }
+}
 
-    mediaRecorder.ondataavailable = event => audioChunks.push(event.data);
-    mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunks, { type: 'audio/wav' });
-        const audioURL = URL.createObjectURL(audioBlob);
-        document.getElementById('audio-playback').src = audioURL;
-        audioChunks = [];
-    };
-
-    mediaRecorder.start();
-    document.getElementById('start-record').disabled = true;
-    document.getElementById('stop-record').disabled = false;
-});
-
-document.getElementById('stop-record').addEventListener('click', () => {
-    mediaRecorder.stop();
-    document.getElementById('start-record').disabled = false;
-    document.getElementById('stop-record').disabled = true;
-});
+// Muat daftar file saat pertama kali
+fetchFiles();
